@@ -1,0 +1,91 @@
+{
+  "title": "Lab27 - Jenkins Pipeline Monitoring",
+  "timezone": "browser",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "\u00daltimo resultado (Jenkins)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROM}"
+      },
+      "targets": [
+        {
+          "expr": "jenkins_job_last_build_result",
+          "legendFormat": "{{job}}"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\u00daltima duraci\u00f3n (s)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROM}"
+      },
+      "targets": [
+        {
+          "expr": "jenkins_job_last_build_duration_seconds",
+          "legendFormat": "{{job}}"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Duraci\u00f3n pipeline (custom)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROM}"
+      },
+      "targets": [
+        {
+          "expr": "pipeline_duration_seconds",
+          "legendFormat": "{{jenkins_job}} #{{build}} ({{branch}})"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Cola de Jenkins",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROM}"
+      },
+      "targets": [
+        {
+          "expr": "jenkins_queue_size",
+          "legendFormat": "queue size"
+        }
+      ]
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "DS_PROM",
+        "type": "datasource",
+        "query": "prometheus",
+        "current": {
+          "text": "Prometheus",
+          "value": "Prometheus"
+        }
+      }
+    ]
+  },
+  "schemaVersion": 38,
+  "version": 1
+}

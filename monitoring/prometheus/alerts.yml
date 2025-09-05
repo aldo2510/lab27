@@ -1,0 +1,20 @@
+groups:
+  - name: jenkins.rules
+    rules:
+      - alert: JenkinsUltimoBuildFallido
+        expr: jenkins_job_last_build_result{job=~".+"} == 2
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Build fallido en {{ $labels.job }}"
+          description: "El último build del job {{ $labels.job }} falló."
+
+      - alert: PipelineLento
+        expr: avg_over_time(jenkins_job_last_build_duration_seconds{job=~".+"}[10m]) > 300
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Pipeline lento: {{ $labels.job }}"
+          description: "El promedio de duración supera 5 minutos en los últimos 10m."
