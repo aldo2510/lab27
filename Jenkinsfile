@@ -5,8 +5,7 @@ pipeline {
   environment {
     APP_NAME = 'hello-lab27'
     IMAGE = "hello-lab27:${env.BUILD_NUMBER}"
-    // Cambia esto por la ubicación real del Pushgateway (por ejemplo http://10.0.0.12:9091)
-    PUSHGATEWAY_URL = 'http://<pushgateway-host>:9091'
+    PUSHGATEWAY_URL = 'http://34.125.165.197:9091'
   }
 
   stages {
