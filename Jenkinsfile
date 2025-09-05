@@ -1,10 +1,10 @@
-\
 pipeline {
   agent any
 
   environment {
     APP_NAME = 'hello-lab27'
     IMAGE = "hello-lab27:${env.BUILD_NUMBER}"
+    // URL real del Pushgateway
     PUSHGATEWAY_URL = 'http://34.125.165.197:9091'
   }
 
@@ -33,10 +33,14 @@ EOF
       }
     }
 
-    stage('Unit tests (Dockerized Node)') {
+    // Usa TU Dockerfile para testear (sin bind-mounts)
+    stage('Unit tests') {
       steps {
         dir('app') {
-          sh 'docker run --rm -v "$PWD":/app -w /app node:18-alpine npm test'
+          sh """
+            docker build -t ${IMAGE}-test .
+            docker run --rm ${IMAGE}-test npm test
+          """
         }
       }
     }
